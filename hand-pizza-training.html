@@ -97,7 +97,7 @@
 
       <section class="screen" id="resultScreen">
         <div class="section-title">闯关完成，马上做实操</div><p class="section-sub">请店长按现场表现勾选，不看分数，只看动作是否做到。</p>
-        <div class="result"><div class="rate" id="finalRate">0 / 8</div><p>实操检查通过建议：8项全部勾选；如有一项未完成，现场演示后再复查。</p></div>
+        <div class="result"><div class="rate" id="finalRate">0 / 10</div><p>知识闯关共10分；实操检查另有8项。建议8项全部勾选，如有一项未完成，现场演示后再复查。</p></div>
         <div class="checklist">
           <label class="checkrow"><input type="checkbox"><div><strong>面粉少量，拍制后拍去余粉</strong><span>饼边不沾粉，避免烤后偏白。</span></div></label>
           <label class="checkrow"><input type="checkbox"><div><strong>手握面皮修整为圆形，留2排孔洞</strong><span>面皮延展面朝上放至烤网。</span></div></label>
@@ -151,7 +151,7 @@
     function initRecipe(){recipeIndex=0;renderRecipe()}
     function renderRecipe(){const r=recipes[recipeIndex];$('#recipeTag').textContent='配方练习 '+(recipeIndex+1)+' / 5';$('#recipeTitle').textContent=r.name+'披萨｜先认主馅料';$('#recipeHint').textContent='选择'+r.name+'的正确预制馅料，再确认“面饼+馅料过全炉”。';const box=$('#recipeOptions');box.innerHTML='';box.dataset.locked='';[r.correct,...r.wrong].sort(()=>Math.random()-.5).forEach((t,i)=>{const b=document.createElement('button');b.className='option';b.dataset.correct=(t===r.correct);b.innerHTML='<span class="num">'+String.fromCharCode(65+i)+'</span><span>'+t+'</span>';b.onclick=()=>{if(box.dataset.locked)return;box.dataset.locked='1';const good=b.dataset.correct==='true';b.classList.add(good?'correct':'wrong');if(!good){const right=box.querySelector('[data-correct="true"]');if(right)right.classList.add('correct')}const fb=$('#recipeFeedback');fb.textContent=good?'答对了！面饼+对应馅料，按配方放馅料过全炉。':'先记住：'+r.name+'对应“'+r.correct+'”。面饼+对应馅料，按配方放馅料过全炉。';fb.className='feedback show '+(good?'good':'bad');$('#recipeNext').classList.add('show')};box.appendChild(b)});$('#recipeNext').textContent=recipeIndex===recipes.length-1?'进入奉客实操':'下一款';$('#recipeNext').onclick=()=>{if(recipeIndex<recipes.length-1){recipeIndex++;renderRecipe()}else show('level4')}}
     $('#level3 .next').onclick=()=>{show('recipeLevels');initRecipe()};$('#level4 .next').onclick=()=>show('resultScreen');
-    $('#resetBtn').onclick=()=>location.reload();$('#doneBtn').onclick=()=>{const n=$$('#resultScreen input:checked').length;$('#finalRate').textContent=n+' / 8';$('#doneBtn').textContent=n===8?'已通过':'已记录';$('#doneBtn').disabled=true};
+    $('#resetBtn').onclick=()=>location.reload();$('#doneBtn').onclick=()=>{const n=$$('#resultScreen input:checked').length;$('#finalRate').textContent=state.score+' / 10｜实操 '+n+' / 8';$('#doneBtn').textContent=n===8?'已通过':'已记录';$('#doneBtn').disabled=true};
     $$('#level1 .task')[1].querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.correct==='true')$('#score1').textContent='2 / 2'}));
   </script>
 </body>
