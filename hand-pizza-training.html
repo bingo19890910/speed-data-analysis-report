@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#c8102e" />
+  <title>手握披萨｜5分钟训练闯关</title>
+  <style>
+    :root{
+      --red:#c8102e; --red-dark:#8e1024; --pink:#f8e7eb; --ink:#1d2638;
+      --muted:#667085; --line:#e6e9ef; --paper:#fbfbfc; --good:#138a55; --warn:#c87500;
+      --shadow:0 10px 30px rgba(29,38,56,.10);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#f2f4f7;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.45}
+    button{font:inherit}
+    .app{width:min(100%,620px);margin:0 auto;min-height:100vh;background:var(--paper);box-shadow:0 0 0 1px rgba(0,0,0,.03)}
+    .topbar{background:var(--red);color:#fff;padding:18px 20px 16px;position:sticky;top:0;z-index:5}
+    .brandline{display:flex;justify-content:space-between;align-items:center;font-size:14px;opacity:.95}
+    .brand{font-weight:800;letter-spacing:.08em}.mini{font-size:12px;opacity:.85}
+    .hero{padding:28px 20px 18px;background:#fff;border-bottom:1px solid var(--line)}
+    h1{margin:0 0 8px;font-size:29px;letter-spacing:-.02em;line-height:1.18}.hero p{margin:0;color:var(--muted);font-size:15px}
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.pill{background:var(--pink);color:var(--red-dark);border-radius:999px;padding:7px 11px;font-size:13px;font-weight:700}
+    .progress{height:7px;background:#f5cbd3}.progress>span{display:block;height:100%;width:0;background:#fff;transition:width .25s}
+    main{padding:18px 16px 30px}.screen{display:none}.screen.active{display:block}
+    .section-title{font-size:20px;font-weight:800;margin:4px 0 4px}.section-sub{margin:0 0 16px;color:var(--muted);font-size:14px}
+    .notice{background:#fff7e9;border:1px solid #f1d5a6;color:#76510b;border-radius:14px;padding:12px 14px;font-size:14px;margin:14px 0}
+    .start-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .start-card h2{margin:0 0 8px;font-size:19px}.start-card ul{margin:10px 0 0;padding-left:20px;color:var(--muted);font-size:14px}.start-card li{margin:6px 0}
+    .primary,.ghost{width:100%;border-radius:14px;padding:14px 16px;border:0;font-weight:800;cursor:pointer}.primary{background:var(--red);color:#fff;box-shadow:0 8px 18px rgba(200,16,46,.22)}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+    .actions{display:flex;gap:10px;margin-top:18px}.actions>*{flex:1}
+    .levelbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.leveltag{font-size:13px;color:var(--red);font-weight:800}.scoretag{font-size:13px;color:var(--muted)}
+    .task{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .task h2{margin:0 0 6px;font-size:22px;line-height:1.25}.task .hint{margin:0 0 16px;color:var(--muted);font-size:14px}
+    .step-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:14px 0}.step{background:#f4f6f8;border:1px solid #e6e9ef;border-radius:10px;padding:10px 6px;text-align:center;min-height:64px;font-size:12px}.step b{display:block;font-size:20px;color:var(--red);margin-bottom:2px}
+    .options{display:grid;gap:10px}.option{display:flex;align-items:center;gap:10px;text-align:left;background:#fff;border:2px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;color:var(--ink);font-weight:700}.option .num{width:28px;height:28px;border-radius:50%;background:var(--pink);color:var(--red-dark);display:grid;place-items:center;font-weight:800;flex:0 0 auto}.option.selected{border-color:var(--red);background:#fff7f8}.option.correct{border-color:var(--good);background:#effaf4}.option.wrong{border-color:#d6455d;background:#fff2f4}
+    .feedback{margin-top:12px;border-radius:12px;padding:12px 13px;font-size:14px;display:none}.feedback.show{display:block}.feedback.good{background:#effaf4;color:#09633d}.feedback.bad{background:#fff2f4;color:#8e1024}
+    .next{margin-top:14px;display:none}.next.show{display:block}
+    .memory{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.memory .box{background:#f7f8fa;border-radius:14px;padding:14px;border:1px solid var(--line)}.memory .big{font-size:27px;font-weight:900;color:var(--red);line-height:1}.memory small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+    .sequence{display:grid;gap:8px}.seq-item{background:#f7f8fa;border:1px solid var(--line);border-radius:12px;padding:12px 13px;display:flex;gap:10px;align-items:center;cursor:pointer;font-weight:700}.seq-item .badge{width:26px;height:26px;background:#e9edf2;color:var(--muted);display:grid;place-items:center;border-radius:50%;font-size:13px}.seq-item.picked{border-color:var(--red);background:#fff7f8}.seq-item.picked .badge{background:var(--red);color:#fff}.answerline{min-height:45px;border:1px dashed #cbd2dc;border-radius:12px;padding:10px 12px;margin:12px 0;color:var(--muted);font-size:13px}
+    .checklist{display:grid;gap:10px}.checkrow{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 13px;display:flex;gap:10px;align-items:flex-start}.checkrow input{width:22px;height:22px;accent-color:var(--red);margin-top:1px}.checkrow strong{display:block;font-size:14px}.checkrow span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.result{background:var(--ink);color:#fff;border-radius:18px;padding:18px;margin:16px 0}.result .rate{font-size:39px;font-weight:900;color:#ffced6}.result p{margin:5px 0 0;color:#d7dce6;font-size:14px}.micro{font-size:12px;color:var(--muted);text-align:center;margin-top:14px}
+    @media (min-width:700px){body{padding:22px 0}.app{border-radius:22px;overflow:hidden}.topbar{position:relative}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brandline"><span class="brand">必胜客｜OE训练</span><span class="mini" id="timer">05:00</span></div>
+      <div class="progress" aria-label="训练进度"><span id="progress"></span></div>
+    </header>
+    <section class="hero">
+      <h1>手握披萨<br>5分钟训练闯关</h1>
+      <p>看一遍、选一次、马上记住关键标准。</p>
+      <div class="pillrow"><span class="pill">员工自学</span><span class="pill">单人闯关</span><span class="pill">结束接实操</span></div>
+    </section>
+    <main>
+      <section class="screen active" id="start">
+        <div class="start-card">
+          <h2>今天要过4关</h2>
+          <ul><li>面团拍制：面粉少量，拍后去粉。</li><li>现做组装：按顺序，不漏步骤。</li><li>预制储存：记住 2个、40分钟、12个。</li><li>奉客打包：堂食和外带各有标准。</li></ul>
+          <div class="notice">训练完成后，请把最后一页交给店长做现场实操检查。</div>
+          <button class="primary" id="startBtn">开始5分钟闯关</button>
+        </div>
+        <p class="micro">标准来源：手握披萨操作标准｜建议班前会或员工自学使用</p>
+      </section>
+
+      <section class="screen" id="level1">
+        <div class="levelbar"><span class="leveltag">第1关｜面团拍制</span><span class="scoretag" id="score1">0 / 2</span></div>
+        <div class="task" data-level="1">
+          <h2>哪一种做法是对的？</h2><p class="hint">先判断，再点击答案。错了也没关系，系统会告诉你为什么。</p>
+          <div class="step-strip"><div class="step"><b>1</b>沾少量粉</div><div class="step"><b>2</b>轻拍延展</div><div class="step"><b>3</b>拍去余粉</div><div class="step"><b>4</b>椭圆/圆形</div><div class="step"><b>5</b>放烤网</div></div>
+          <div class="options" data-q="q1"><button class="option" data-correct="true"><span class="num">A</span><span>面粉只沾少量，拍制后拍去多余面粉，饼边不沾粉。</span></button><button class="option"><span class="num">B</span><span>面粉越多越不粘手，饼边也一起沾满。</span></button><button class="option"><span class="num">C</span><span>面团直接用刮刀压扁，压死饼边再拉伸。</span></button></div>
+          <div class="feedback"></div><button class="primary next">下一题</button>
+        </div>
+        <div class="task" data-level="1" style="margin-top:14px;display:none"><h2>手握面皮应做成什么形状？</h2><p class="hint">记住：手握披萨不是小装多谷。</p><div class="options"><button class="option" data-correct="true"><span class="num">A</span><span>圆形，放烤网上修整，留2排孔洞。</span></button><button class="option"><span class="num">B</span><span>椭圆形，左右各留3-4排孔洞。</span></button></div><div class="feedback"></div><button class="primary next">进入第2关</button></div>
+      </section>
+
+      <section class="screen" id="level2">
+        <div class="levelbar"><span class="leveltag">第2关｜现做组装</span><span class="scoretag">按正确顺序点击</span></div>
+        <div class="task"><h2>把现做流程排好</h2><p class="hint"><b>本关示例：爆香黑猪肉披萨</b><br>按标准顺序完成10步：面饼、爆香黑猪馅料、墨椒车打芝士蛋黄酱1汤勺、10g生菜，一个都不能漏。</p><div class="notice">提示：本关只练“步骤顺序”，配方馅料记忆将在下面新增的5关中单独练习。</div><div class="answerline" id="answerline">你的顺序会出现在这里</div><div class="sequence" id="sequence"></div><div class="feedback" id="seqFeedback"></div><button class="primary next" id="seqNext">进入配方组装练习</button></div>
+      </section>
+
+      <section class="screen" id="level3">
+        <div class="levelbar"><span class="leveltag">第3关｜预制储存</span><span class="scoretag">记住3个数字</span></div>
+        <div class="task"><h2>手握预制，关键数字是什么？</h2><p class="hint">把数字和动作配对，避免高峰现做、口感变韧。</p><div class="memory"><div class="box"><div class="big">2个</div><small>烤盘最大烤制量</small></div><div class="box"><div class="big">40分钟</div><small>不锈钢网架冷却时间</small></div><div class="box"><div class="big">12个</div><small>面团袋最多平铺数量</small></div><div class="box"><div class="big">当天</div><small>常温备用至打烊</small></div></div><div class="options" data-q="q3"><button class="option" data-correct="true"><span class="num">A</span><span>冷却40分钟，装袋最多12个平铺，加盖，常温备用至当天打烊。</span></button><button class="option"><span class="num">B</span><span>趁热装袋，最多20个堆放，第二天继续使用。</span></button><button class="option"><span class="num">C</span><span>烤盘一次烤4个，冷却10分钟就可以入袋。</span></button></div><div class="feedback"></div><button class="primary next">进入第4关</button></div>
+      </section>
+
+      <section class="screen" id="recipeLevels">
+        <div class="levelbar"><span class="leveltag" id="recipeTag">配方练习 1 / 5</span><span class="scoretag">每关1题</span></div>
+        <div class="task"><h2 id="recipeTitle">认出这款披萨的主馅料</h2><p class="hint" id="recipeHint">选择正确预制馅料，再确认“面饼+馅料过全炉”。</p><div class="options" id="recipeOptions"></div><div class="feedback" id="recipeFeedback"></div><button class="primary next" id="recipeNext">下一款</button></div>
+      </section>
+
+      <section class="screen" id="level4">
+        <div class="levelbar"><span class="leveltag">第4关｜奉客打包</span><span class="scoretag">堂食 / 外带</span></div>
+        <div class="task"><h2>顾客在餐厅堂食，应该怎么奉客？</h2><p class="hint">先选场景，再选动作。</p><div class="options" data-q="q4"><button class="option" data-correct="true"><span class="num">A</span><span>生菜面朝下放在垫纸上，垫纸对折放入小食篮，披萨面朝外。</span></button><button class="option"><span class="num">B</span><span>直接放小铁盘，披萨面朝内，不需要垫纸。</span></button></div><div class="feedback"></div><button class="primary next">查看实操检查表</button></div>
+      </section>
+
+      <section class="screen" id="resultScreen">
+        <div class="section-title">闯关完成，马上做实操</div><p class="section-sub">请店长按现场表现勾选，不看分数，只看动作是否做到。</p>
+        <div class="result"><div class="rate" id="finalRate">0 / 8</div><p>实操检查通过建议：8项全部勾选；如有一项未完成，现场演示后再复查。</p></div>
+        <div class="checklist">
+          <label class="checkrow"><input type="checkbox"><div><strong>面粉少量，拍制后拍去余粉</strong><span>饼边不沾粉，避免烤后偏白。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>手握面皮修整为圆形，留2排孔洞</strong><span>面皮延展面朝上放至烤网。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>现做组装步骤完整</strong><span>油盘→放面饼→对折→放馅料→过全炉→转移→10g生菜→夹取奉客。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>预制烤盘最大2个</strong><span>开市优先准备，确保高峰前完成。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>面饼冷却40分钟再入袋</strong><span>未完全冷却会导致水汽，口感变韧。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>入袋最多12个平铺，加盖</strong><span>干净面团盘内平铺，常温备用至当天打烊。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>堂食使用小食篮</strong><span>生菜面朝下放垫纸，披萨面朝外。</span></div></label>
+          <label class="checkrow"><input type="checkbox"><div><strong>外带白卡纸盒正确打包</strong><span>底部向内顶起，垫纸竖向平行居中，翻折包裹后关盒。</span></div></label>
+        </div>
+        <div class="actions"><button class="ghost" id="resetBtn">再练一次</button><button class="primary" id="doneBtn">完成检查</button></div>
+        <p class="micro">提示：如果员工连续两次错在同一标准，请店长把该标准单独示范一次。</p>
+      </section>
+    </main>
+  </div>
+  <script>
+    const state={score:0,step:0,total:4,timer:300};
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+    const screens=['start','level1','level2','level3','recipeLevels','level4','resultScreen'];
+    function show(id){screens.forEach(x=>$('#'+x).classList.toggle('active',x===id));state.step=screens.indexOf(id);$('#progress').style.width=((Math.max(0,state.step)/5)*100)+'%';window.scrollTo({top:0,behavior:'smooth'})}
+    function tick(){if(state.timer<=0)return;state.timer--;const m=String(Math.floor(state.timer/60)).padStart(2,'0'),s=String(state.timer%60).padStart(2,'0');$('#timer').textContent=m+':'+s}
+    setInterval(tick,1000);
+    function wireOptions(root){
+      root.querySelectorAll('.options').forEach(group=>{
+        group.querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>{
+          if(group.dataset.locked)return;
+          group.dataset.locked='1';
+          const good=btn.dataset.correct==='true';
+          btn.classList.add(good?'correct':'wrong');
+          if(!good){const right=group.querySelector('[data-correct="true"]'); if(right) right.classList.add('correct');}
+          const fb=group.parentElement.querySelector('.feedback');
+          fb.textContent=good?'答对了！把这个动作照着做。':'先记住红色标准，再继续。正确答案已标出。';
+          fb.className='feedback show '+(good?'good':'bad');
+          if(good)state.score++;
+          const next=group.parentElement.querySelector('.next');
+          if(next)next.classList.add('show');
+        }));
+      });
+    }
+    wireOptions(document);
+    $('#startBtn').onclick=()=>{show('level1');$('#timer').textContent='05:00'};
+    const tasks=$$('#level1 .task');tasks[0].querySelector('.next').onclick=()=>{tasks[0].style.display='none';tasks[1].style.display='block';$('#score1').textContent='1 / 2'};tasks[1].querySelector('.next').onclick=()=>show('level2');
+    const seq=[['铸铁盘刷薄油','a'],['放面饼并对折','b'],['按配方放爆香黑猪馅料','c'],['均匀淋1汤勺墨椒车打芝士蛋黄酱','d'],['过全炉烤制','e'],['转移至褐牛垫纸','f'],['鸡夹夹取10g生菜','g'],['用鸡夹+比萨铲将烤制物料转移到生菜上','h'],['用鸡夹夹起手握披萨','i'],['按标准奉客','j']];let picked=[];const seqBox=$('#sequence');seq.forEach((x,i)=>{const b=document.createElement('button');b.className='seq-item';b.dataset.key=x[1];b.innerHTML='<span class="badge">'+(i+1)+'</span>'+x[0];b.onclick=()=>{if(b.classList.contains('picked'))return;picked.push(x[1]);b.classList.add('picked');b.querySelector('.badge').textContent=picked.length;$('#answerline').textContent='已选 '+picked.length+' 步：'+picked.map(k=>seq.find(x=>x[1]===k)[0]).join(' → ');if(picked.length===seq.length){const ok=picked.join('')==='abcdefghij';const fb=$('#seqFeedback');fb.textContent=ok?'顺序正确！爆香黑猪肉披萨现做流程不能漏步。':'有一步顺序不对。标准顺序：刷油→面饼对折→爆香黑猪馅料→1汤勺酱→过全炉→转移→10g生菜→放物料→夹起→奉客。';fb.className='feedback show '+(ok?'good':'bad');if(ok)state.score++;$('#seqNext').classList.add('show')}};seqBox.appendChild(b)});$('#seqNext').onclick=()=>show('level3');
+    $('#seqNext').onclick=()=>{show('recipeLevels');initRecipe()};
+    const recipes=[
+      {name:'缤纷烤鸡',correct:'缤纷烤鸡预制馅料',wrong:['爆香黑猪预制馅料','意式肉酱满贯预制馅料']},
+      {name:'爆香黑猪',correct:'爆香黑猪预制馅料',wrong:['蜂蜜芥末脆鸡排预制馅料','蒜香多汁鸡排预制馅料']},
+      {name:'意式肉酱满贯',correct:'意式肉酱满贯预制馅料',wrong:['缤纷烤鸡预制馅料','爆香黑猪预制馅料']},
+      {name:'蜂蜜芥末脆鸡排',correct:'蜂蜜芥末脆鸡排预制馅料',wrong:['蒜香多汁鸡排预制馅料','缤纷烤鸡预制馅料']},
+      {name:'蒜香多汁鸡排',correct:'蒜香多汁鸡排预制馅料',wrong:['意式肉酱满贯预制馅料','蜂蜜芥末脆鸡排预制馅料']}
+    ];let recipeIndex=0;
+    function initRecipe(){recipeIndex=0;renderRecipe()}
+    function renderRecipe(){const r=recipes[recipeIndex];$('#recipeTag').textContent='配方练习 '+(recipeIndex+1)+' / 5';$('#recipeTitle').textContent=r.name+'披萨｜先认主馅料';$('#recipeHint').textContent='选择'+r.name+'的正确预制馅料，再确认“面饼+馅料过全炉”。';const box=$('#recipeOptions');box.innerHTML='';box.dataset.locked='';[r.correct,...r.wrong].sort(()=>Math.random()-.5).forEach((t,i)=>{const b=document.createElement('button');b.className='option';b.dataset.correct=(t===r.correct);b.innerHTML='<span class="num">'+String.fromCharCode(65+i)+'</span><span>'+t+'</span>';b.onclick=()=>{if(box.dataset.locked)return;box.dataset.locked='1';const good=b.dataset.correct==='true';b.classList.add(good?'correct':'wrong');if(!good){const right=box.querySelector('[data-correct="true"]');if(right)right.classList.add('correct')}const fb=$('#recipeFeedback');fb.textContent=good?'答对了！面饼+对应馅料，按配方放馅料过全炉。':'先记住：'+r.name+'对应“'+r.correct+'”。面饼+对应馅料，按配方放馅料过全炉。';fb.className='feedback show '+(good?'good':'bad');$('#recipeNext').classList.add('show')};box.appendChild(b)});$('#recipeNext').textContent=recipeIndex===recipes.length-1?'进入奉客实操':'下一款';$('#recipeNext').onclick=()=>{if(recipeIndex<recipes.length-1){recipeIndex++;renderRecipe()}else show('level4')}}
+    $('#level3 .next').onclick=()=>show('level4');$('#level4 .next').onclick=()=>show('resultScreen');
+    $('#resetBtn').onclick=()=>location.reload();$('#doneBtn').onclick=()=>{const n=$$('#resultScreen input:checked').length;$('#finalRate').textContent=n+' / 8';$('#doneBtn').textContent=n===8?'已通过':'已记录';$('#doneBtn').disabled=true};
+    $$('#level1 .task')[1].querySelectorAll('.option').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.correct==='true')$('#score1').textContent='2 / 2'}));
+  </script>
+</body>
+</html>
